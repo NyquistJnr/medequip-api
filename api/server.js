@@ -29,7 +29,7 @@ app.use("/api/equipment", equipmentRoutes);
 // Setup Swagger
 setupSwagger(app);
 
-/* sequelize
+sequelize
   .sync()
   .then(() => {
     console.log("Database connected and synced successfully");
@@ -40,6 +40,6 @@ setupSwagger(app);
   })
   .catch((err) => {
     console.error("Unable to connect to the database:", err);
-  }); */
+  });
 
 module.exports = app;
