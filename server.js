@@ -29,7 +29,11 @@ app.use("/api/equipment", equipmentRoutes);
 // Setup Swagger
 setupSwagger(app);
 
-sequelize
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+/* sequelize
   .sync()
   .then(() => {
     console.log("Database connected and synced successfully");
@@ -41,3 +45,4 @@ sequelize
   .catch((err) => {
     console.error("Unable to connect to the database:", err);
   });
+ */
