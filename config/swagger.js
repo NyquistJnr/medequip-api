@@ -12,11 +12,11 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: process.env.BASE_URL || "https://medequip-api.vercel.app/", // Replace with your server URL
+        url: process.env.BASE_URL || "https://medequip-api.vercel.app", // Update with correct base URL
       },
     ],
   },
-  apis: ["./routes/*.js"], // Path to your API docs
+  apis: ["./api/routes/*.js"], // Path to your API docs; make sure it matches your structure
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
