@@ -17,7 +17,7 @@ const upload = multer({ storage: multer.memoryStorage() }); // Use memory storag
 
 /**
  * @swagger
- * /:
+ * /equipment/:
  *   post:
  *     summary: Create Equipment
  *     description: Create a new equipment entry. Requires admin or super role.
@@ -68,7 +68,7 @@ router.post(
 
 /**
  * @swagger
- * /:
+ * /equipment/:
  *   get:
  *     summary: Get All Equipment
  *     description: Retrieve a list of all equipment. No authentication required.
@@ -89,7 +89,7 @@ router.get("/", equipmentController.getAllEquipment);
 
 /**
  * @swagger
- * /{id}:
+ * /equipment/{id}:
  *   get:
  *     summary: Get Equipment by ID
  *     description: Retrieve a single equipment entry by ID. No authentication required.
@@ -117,7 +117,7 @@ router.get("/:id", equipmentController.getEquipmentById);
 
 /**
  * @swagger
- * /{id}:
+ * /equipment/{id}:
  *   put:
  *     summary: Update Equipment
  *     description: Update an existing equipment entry. Requires admin or super role.
@@ -177,7 +177,7 @@ router.put(
 
 /**
  * @swagger
- * /{id}:
+ * /equipment/{id}:
  *   delete:
  *     summary: Delete Equipment
  *     description: Delete an existing equipment entry. Requires admin or super role.
