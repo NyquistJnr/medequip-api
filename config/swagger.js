@@ -12,7 +12,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:5000", // Replace with your server URL
+        url: process.env.BASE_URL || "https://medequip-api.vercel.app/", // Replace with your server URL
       },
     ],
   },
