@@ -16,7 +16,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./api/routes/*.js"], // Path to your API docs; make sure it matches your structure
+  apis: ["./routes/*.js"], // Path to your API docs; make sure it matches your structure
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
