@@ -34,7 +34,7 @@ exports.signup = async (req, res) => {
     const verificationToken = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "10m" }
+      { expiresIn: "30m" }
     );
 
     // Send verification email
