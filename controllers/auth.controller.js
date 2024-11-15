@@ -38,7 +38,7 @@ exports.signup = async (req, res) => {
     );
 
     // Send verification email
-    await sendVerificationEmail(user.email, verificationToken);
+    await sendVerificationEmail(user.email, verificationToken); //verification token
 
     res
       .status(201)
