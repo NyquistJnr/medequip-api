@@ -17,7 +17,7 @@ exports.sendVerificationEmail = async (email, token) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Account Verification",
-    html: `<p>Click on the link below to verify your account:</p><a href="${verificationLink}">Verify Account ${verificationLink}</a>`,
+    html: `<p>Click the link below to verify your account:</p><a href="${verificationLink}">Verify Account ${verificationLink}</a>`,
   });
 };
 
