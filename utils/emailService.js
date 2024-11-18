@@ -17,13 +17,13 @@ exports.sendVerificationEmail = async (email, token) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Account Verification",
-    html: `<p>Click the link below to verify your account:</p><a href="${verificationLink}">Verify Account ${verificationLink}</a>`,
+    html: `<p>Click on the link below to verify your account:</p><a href="${verificationLink}">Verify Account ${verificationLink}</a>`,
   });
 };
 
 // Send Password Reset Email
 exports.sendPasswordResetEmail = async (email, token) => {
-  const resetLink = `http://your-app.com/reset-password/${token}`;
+  const resetLink = `http://localhost:3000/reset-password/${token}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
