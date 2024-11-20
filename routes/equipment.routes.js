@@ -61,7 +61,7 @@ const upload = multer({ storage: multer.memoryStorage() }); // Use memory storag
 router.post(
   "/",
   authenticate,
-  checkRole(["admin", "super"]),
+  checkRole(["admin", "super", "user"]),
   upload.array("images"),
   equipmentController.createEquipment
 );
