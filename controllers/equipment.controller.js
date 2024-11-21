@@ -12,13 +12,14 @@ exports.createEquipment = async (req, res) => {
   try {
     // Upload images to Firebase and get URLs
     const imageUrls = await uploadImages(req.files);
+    const parsedTags = typeof tags === 'string' ? JSON.parse(tags) : tags;
 
     const equipment = await Equipment.create({
       name,
       description,
       category,
       images: imageUrls,
-      tags,
+      tags: parsedTags,
       useCases,
       userId,
     });
