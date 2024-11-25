@@ -20,7 +20,7 @@ const { authenticate, checkRole } = require("../middlewares/auth.middleware");
 router.get(
   "/",
   authenticate,
-  checkRole(["admin", "super"]),
+  checkRole(["admin", "super", "user"]),
   async (req, res) => {
     try {
       const users = await User.findAll();
