@@ -1,6 +1,7 @@
 // controllers/equipment.controller.js
-
+const { Op } = require("sequelize");
 const Equipment = require("../models/equipment.model");
+const SavedEquipment = require("../models/savedequipment.model");
 const User = require("../models/user.model");
 const { uploadImages } = require("../utils/firebaseService"); // Make sure to implement this utility
 
@@ -100,5 +101,107 @@ exports.deleteEquipment = async (req, res) => {
     res.status(204).send();
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.createSavedEquipment = async (req, res) => {
+  const { equipmentId } = req.body;
+  const userId = req.user.id;
+
+  try {
+    const savedequipment = await SavedEquipment.upsert({
+      userId: userId,
+      equipmentId: [equipmentId]
+    })
+
+    res.status(201).json(savedequipment);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getSavedEquipment = async (req, res) => {
+  try {
+    const savedEquipmentList = await SavedEquipment.findOne({
+      where: { userId: req.user.id },
+    })
+
+    if(!savedEquipmentList){
+      return ;
+    }
+    const equipmentIds = savedEquipmentList.equipmentIds
+
+    const equipmentDetails = await Equipment.findAll({
+      where: {
+        id: {
+          [Op.in]: equipmentIds
+        }
+      }
+    });
+    res.status(200).json(equipmentDetails);
+  } catch(err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+exports.saveEquipment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const savedEquipment = await SavedEquipment.findOne({
+      where: { userId: req.user.id}
+    })
+    savedEquipment.equipmentIds.push(id);
+    await savedEquipment.save();
+
+    res.status(200).json({message: "equipment added"});
+  } catch (err) {
+    res.status(500).json({error: err.message });
+  }
+}
+
+exports.filterEquipments = async (req, res) => {
+    const { name, category } = req.query;
+    try {
+      const filters = {}
+
+      if(name){
+        filters.name = { [Op.iLike]: `%${name}%`};
+      }
+
+      if (category) {
+        filters.category = { [Op.eq]: category };
+      }
+
+      const equipmentList = await Equipment.findAll({
+        where: filters
+      });
+  
+      res.json(equipmentList);
+    } catch (err) {
+      res.status(500).json({error: err.message})
+    }
+}
+
+exports.searchEquipments = async (req, res) => {
+  const { searchTerm } = req.query;
+
+  try {
+    
+    const filters = {};
+
+    if (searchTerm) {
+      filters[Op.or] = [
+        { name: { [Op.iLike]: `%${searchTerm}%` } },  
+        { category: { [Op.iLike]: `%${searchTerm}%` } }
+      ];
+    }
+
+    const equipmentList = await Equipment.findAll({
+      where: filters
+    });
+
+    res.status(200).json(equipmentList);
+  } catch (error) {
+    res.status(500).json({error: err.message})
   }
 };

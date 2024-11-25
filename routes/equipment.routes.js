@@ -206,4 +206,139 @@ router.delete(
   equipmentController.deleteEquipment
 );
 
+/**
+ * @swagger
+ * /equipment/saved:
+ *   get:
+ *     summary: Saved equipments
+ *     description: Equipments saved by user, authentication required.
+ *     tags: [Equipment]
+ *     responses:
+ *       '200':
+ *         description: A list of equipments saved by user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Equipment'
+ *       '500':
+ *         description: Internal server error.
+ */
+router.get(
+  "/saved",
+  authenticate,
+  equipmentController.getSavedEquipment
+);
+
+
+router.post(
+  "/create/savedEquipment",
+  authenticate,
+  equipmentController.createSavedEquipment
+);
+
+
+/**
+ * @swagger
+ * /equipment/filter:
+ *   get:
+ *     summary: Filter equipments
+ *     description: Filter equipments by name and category, no authentication required.
+ *     tags: [Equipment]
+ *     parameters:
+ *       - name: name
+ *         in: path
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: name of the equipment to retrieve.
+ *       - name: category
+ *         in: path
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: category of the equipment to retrieve.
+ *     responses:
+ *       '200':
+ *         description: Equipments retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Equipment'
+ *       '404':
+ *         description: No Equipment matches this criteria.
+ *       '500':
+ *         description: Internal server error.
+ */
+router.get(
+  "/filter",
+  authenticate,
+  equipmentController.filterEquipments
+);
+
+/**
+ * @swagger
+ * /equipment/search:
+ *   get:
+ *     summary: Search equipments
+ *     description: Search equipments based on name and category, no authentication required.
+ *     tags: [Equipment]
+ *     parameters:
+ *       - name: searchTerm
+ *         in: path
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: name or category of the equipment to retrieve.
+ *     responses:
+ *       '200':
+ *         description: Equipments retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Equipment'
+ *       '404':
+ *         description: No Equipment matches this criteria.
+ *       '500':
+ *         description: Internal server error.
+ */
+router.get(
+  "/search",
+  authenticate,
+  equipmentController.searchEquipments
+);
+
+/**
+ * @swagger
+ * /equipment/save:
+ *   put:
+ *     summary: Save Equipment
+ *     description: Save a new equipment entry. Requires authentication.
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Equipment]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: id of the equipment to save.
+ *     responses:
+ *       '200':
+ *         description: Equipment added successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Equipment'
+ *       '500':
+ *         description: Internal server error.
+ */
+router.put(
+  "/save/:id",
+  authenticate,
+  equipmentController.saveEquipment
+);
+
 module.exports = router;
