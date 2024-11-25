@@ -30,11 +30,6 @@ const Equipment = sequelize.define("Equipment", {
     type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: true,
   },
-  popularity: {
-    type: DataTypes.INTEGER,
-    default: 0,
-    allowNull: false,
-  },
   useCases: {
     type: DataTypes.TEXT,
     allowNull: false,
