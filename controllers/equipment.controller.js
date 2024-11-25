@@ -205,3 +205,15 @@ exports.searchEquipments = async (req, res) => {
     res.status(500).json({error: err.message})
   }
 };
+
+exports.getPopularEquipments = async (req, res) => {
+  try {
+    const equipments = await Post.findAll({
+      order: sequelize.literal('max(popularity) DESC'),
+      limit: 10
+    });
+    res.json(equipments)
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}

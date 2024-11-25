@@ -104,7 +104,9 @@ exports.login = async (req, res) => {
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email,
-        role: user.role //user.role
+        role: user.role, //user.role
+        phone: user.phone,
+        dob: user.dob
       },
       accessToken,
       refreshToken,

@@ -273,7 +273,6 @@ router.post(
  */
 router.get(
   "/filter",
-  authenticate,
   equipmentController.filterEquipments
 );
 
@@ -305,7 +304,6 @@ router.get(
  */
 router.get(
   "/search",
-  authenticate,
   equipmentController.searchEquipments
 );
 
@@ -339,6 +337,28 @@ router.put(
   "/save/:id",
   authenticate,
   equipmentController.saveEquipment
+);
+// * @swagger
+//  * /equipment/popular:
+//  *   get:
+//  *     summary: Get popular equipments
+//  *     description: Get first 10 popular equipments, no authentication required.
+//  *     tags: [Equipment]
+//  *     responses:
+//  *       '200':
+//  *         description: Equipments retrieved successfully.
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               $ref: '#/components/schemas/Equipment'
+//  *       '404':
+//  *         description: No Equipment matches this criteria.
+//  *       '500':
+//  *         description: Internal server error.
+//  */
+router.get(
+  "/popular",
+  equipmentController.getPopularEquipments
 );
 
 module.exports = router;
