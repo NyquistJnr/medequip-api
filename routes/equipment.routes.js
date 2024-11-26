@@ -170,7 +170,7 @@ router.get("/:id", equipmentController.getEquipmentById);
 router.put(
   "/:id",
   authenticate,
-  checkRole(["admin", "super"]),
+  checkRole(["admin", "super", "user"]),
   upload.array("images"),
   equipmentController.updateEquipment
 );
@@ -202,7 +202,7 @@ router.put(
 router.delete(
   "/:id",
   authenticate,
-  checkRole(["admin", "super"]),
+  checkRole(["admin", "super", "user"]),
   equipmentController.deleteEquipment
 );
 
