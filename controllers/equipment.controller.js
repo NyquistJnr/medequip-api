@@ -168,37 +168,20 @@ exports.saveEquipment = async (req, res) => {
   } catch (err) {
     res.status(500).json({error: err.message });
   }
-}
+};
 
-exports.filterEquipments = async (req, res) => {
-    const { name, category } = req.query;
-    try {
-      const filters = {}
-
-      if(name){
-        filters.name = { [Op.iLike]: `%${name}%`};
-      }
-
-      if (category) {
-        filters.category = { [Op.eq]: category };
-      }
-
-      const equipmentList = await Equipment.findAll({
-        where: filters
-      });
-  
-      res.json(equipmentList);
-    } catch (err) {
-      res.status(500).json({error: err.message})
-    }
-}
-
-exports.searchEquipments = async (req, res) => {
-  const { searchTerm } = req.query;
-
+exports.getFilteredEquipment = async (req, res) => {
+  const { name, category, searchTerm } = req.query;
   try {
-    
-    const filters = {};
+    const filters = {}
+
+    if(name){
+      filters.name = { [Op.iLike]: `%${name}%`};
+    }
+
+    if (category) {
+      filters.category = { [Op.eq]: category };
+    }
 
     if (searchTerm) {
       filters[Op.or] = [
@@ -208,11 +191,11 @@ exports.searchEquipments = async (req, res) => {
     }
 
     const equipmentList = await Equipment.findAll({
-      where: filters
+      where: filters,
+      include: User
     });
-
-    res.status(200).json(equipmentList);
-  } catch (error) {
-    res.status(500).json({error: err.message})
+    res.json(equipmentList);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };

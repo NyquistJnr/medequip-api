@@ -238,13 +238,12 @@ router.post(
   equipmentController.createSavedEquipment
 );
 
-
 /**
  * @swagger
- * /equipment/filter:
+ * /equipment/:
  *   get:
- *     summary: Filter equipments
- *     description: Filter equipments by name and category, no authentication required.
+ *     summary: Get All Equipment
+ *     description: Retrieve a list of all equipment. No authentication required.
  *     tags: [Equipment]
  *     parameters:
  *       - name: name
@@ -259,31 +258,6 @@ router.post(
  *         schema:
  *           type: string
  *         description: category of the equipment to retrieve.
- *     responses:
- *       '200':
- *         description: Equipments retrieved successfully.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Equipment'
- *       '404':
- *         description: No Equipment matches this criteria.
- *       '500':
- *         description: Internal server error.
- */
-router.get(
-  "/filter",
-  equipmentController.filterEquipments
-);
-
-/**
- * @swagger
- * /equipment/search:
- *   get:
- *     summary: Search equipments
- *     description: Search equipments based on name and category, no authentication required.
- *     tags: [Equipment]
- *     parameters:
  *       - name: searchTerm
  *         in: path
  *         required: false
@@ -292,20 +266,17 @@ router.get(
  *         description: name or category of the equipment to retrieve.
  *     responses:
  *       '200':
- *         description: Equipments retrieved successfully.
+ *         description: A list of equipment.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Equipment'
- *       '404':
- *         description: No Equipment matches this criteria.
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Equipment'
  *       '500':
  *         description: Internal server error.
  */
-router.get(
-  "/search",
-  equipmentController.searchEquipments
-);
+router.get("/", equipmentController.getFilteredEquipment);
 
 /**
  * @swagger
