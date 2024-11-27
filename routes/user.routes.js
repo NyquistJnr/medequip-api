@@ -103,6 +103,7 @@ router.get("/:id", authenticate, async (req, res) => {
  */
 router.put("/:id", authenticate, async (req, res) => {
   try {
+    const { firstname, lastname, phone, dob, email} = req.body;
     const user = await User.findByPk(req.params.id);
     if (user) {
       // Allow only the user to update their own profile
@@ -112,7 +113,13 @@ router.put("/:id", authenticate, async (req, res) => {
           .json({ message: "You can only update your own profile" });
       }
 
-      await user.update(req.body);
+      user.firstname = firstname || user.firstname
+      user.lastname = lastname || user.lastname
+      user.phone = phone || user.phone
+      user.dob = dob || user.dob
+      user.email = email || user.email
+
+      await user.update();
       res.json(user);
     } else {
       res.status(404).json({ message: "User not found" });

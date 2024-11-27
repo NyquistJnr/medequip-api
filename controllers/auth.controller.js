@@ -5,6 +5,7 @@ const {
   sendVerificationEmail,
   sendPasswordResetEmail,
 } = require("../utils/emailService");
+const SavedEquipment = require("../models/savedequipment.model");
 
 // Signup logic
 exports.signup = async (req, res) => {
@@ -29,6 +30,12 @@ exports.signup = async (req, res) => {
       dob,
       role: "user",
     });
+
+    // Generate SavedEquipment
+    await SavedEquipment.create({
+      userId: user.id,
+      equipmentId: []
+    })
 
     // Generate a verification token
     const verificationToken = jwt.sign(

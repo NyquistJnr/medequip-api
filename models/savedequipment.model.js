@@ -20,7 +20,7 @@ const SavedEquipment = sequelize.define("SavedEquipment", {
       unique: true
     },
     equipmentIds: {
-      type: DataTypes.JSON,
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
       allowNull: true,
     }
   })

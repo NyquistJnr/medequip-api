@@ -105,13 +105,12 @@ exports.deleteEquipment = async (req, res) => {
 };
 
 exports.createSavedEquipment = async (req, res) => {
-  const { equipmentId } = req.body;
   const userId = req.user.id;
 
   try {
     const savedequipment = await SavedEquipment.upsert({
       userId: userId,
-      equipmentId: [equipmentId]
+      equipmentIds: []
     })
 
     res.status(201).json(savedequipment);
@@ -119,6 +118,18 @@ exports.createSavedEquipment = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getPopularEquipments = async (req, res) => {
+  try {
+    const equipments = await Post.findAll({
+      order: sequelize.literal('max(popularity) DESC'),
+      limit: 10
+    });
+    res.json(equipments)
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
 
 exports.getSavedEquipment = async (req, res) => {
   try {
@@ -203,17 +214,5 @@ exports.searchEquipments = async (req, res) => {
     res.status(200).json(equipmentList);
   } catch (error) {
     res.status(500).json({error: err.message})
-  }
-};
-
-exports.getPopularEquipments = async (req, res) => {
-  try {
-    const equipments = await Post.findAll({
-      order: sequelize.literal('max(popularity) DESC'),
-      limit: 10
-    });
-    res.json(equipments)
-  } catch (err) {
-    res.status(500).json({ error: err.message });
   }
 };

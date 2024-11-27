@@ -226,7 +226,7 @@ router.delete(
  *         description: Internal server error.
  */
 router.get(
-  "/saved",
+  "/view/saved",
   authenticate,
   equipmentController.getSavedEquipment
 );
