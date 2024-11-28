@@ -161,8 +161,24 @@ exports.saveEquipment = async (req, res) => {
     const savedEquipment = await SavedEquipment.findOne({
       where: { userId: req.user.id}
     })
-    savedEquipment.equipmentIds.push(id);
-    await savedEquipment.save();
+    
+    if(savedEquipment){
+      let equipmentIds = savedEquipment.equipmentIds || []
+      if (!equipmentIds.includes(id)) {
+        equipmentIds.push(id);
+        
+        // Update the record and save to the database
+        savedEquipment.equipmentIds = equipmentIds;
+        await savedEquipment.save();
+      } else {
+        console.log("Equipment ID already added.");
+      }
+    }else {
+        await SavedEquipment.create({
+          userId: req.user.id,
+          equipmentIds: [id]
+        });
+    }
 
     res.status(200).json({message: "equipment added"});
   } catch (err) {
