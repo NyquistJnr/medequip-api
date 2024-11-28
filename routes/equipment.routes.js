@@ -87,6 +87,25 @@ router.post(
  */
 router.get("/", equipmentController.getAllEquipment);
 
+/**
+ * @swagger
+ * /equipment/pagination:
+ *   get:
+ *     summary: Get All and paginate all Equipment  
+ *     description: Retrieve a list of all equipment and paginate them 10 to 1 page. No authentication required.
+ *     tags: [Equipment]
+ *     responses:
+ *       '200':
+ *         description: A list of equipment.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Equipment'
+ *       '500':
+ *         description: Internal server error.
+ */
 router.get("/", equipmentController.getPaginatedEquipment);
 
 /**
@@ -242,10 +261,10 @@ router.post(
 
 /**
  * @swagger
- * /equipment/:
+ * /equipment/filter:
  *   get:
- *     summary: Get All Equipment
- *     description: Retrieve a list of all equipment. No authentication required.
+ *     summary: Get filtered Equipment
+ *     description: Retrieve a list equipment filtered through quering. No authentication required.
  *     tags: [Equipment]
  *     parameters:
  *       - name: name
@@ -260,12 +279,12 @@ router.post(
  *         schema:
  *           type: string
  *         description: category of the equipment to retrieve.
- *       - name: searchTerm
+ *       - name: tags
  *         in: path
  *         required: false
  *         schema:
  *           type: string
- *         description: name or category of the equipment to retrieve.
+ *         description: tags of the equipment to retrieve.
  *     responses:
  *       '200':
  *         description: A list of equipment.
@@ -278,7 +297,7 @@ router.post(
  *       '500':
  *         description: Internal server error.
  */
-router.get("/equipment/filter", equipmentController.filterEquipment);
+router.get("/filter", equipmentController.filterEquipment);
 
 /**
  * @swagger
