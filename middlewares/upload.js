@@ -5,7 +5,7 @@ const path = require("path");
 const storage = multer.memoryStorage(); // Use memory storage for Firebase
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Set file size limit to 5MB
+  limits: { fileSize: 15 * 1024 * 1024 }, // Set file size limit to 5MB
   fileFilter: (req, file, cb) => {
     const fileTypes = /jpeg|jpg|png/;
     const extname = fileTypes.test(

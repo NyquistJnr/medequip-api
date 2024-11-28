@@ -11,6 +11,8 @@ exports.createEquipment = async (req, res) => {
   const userId = req.user.id; // Extract userId from the authenticated user
 
   try {
+    console.log("files received: ", req.files);
+    
     // Upload images to Firebase and get URLs
     const imageUrls = await uploadImages(req.files);
 
