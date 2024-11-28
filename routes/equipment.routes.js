@@ -278,7 +278,7 @@ router.post(
  *       '500':
  *         description: Internal server error.
  */
-router.get("/filter", equipmentController.filterEquipment);
+router.get("/equipment/filter", equipmentController.filterEquipment);
 
 /**
  * @swagger
