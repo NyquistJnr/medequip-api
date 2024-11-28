@@ -188,32 +188,72 @@ exports.saveEquipment = async (req, res) => {
   }
 };
 
-exports.getFilteredEquipment = async (req, res) => {
-  const { name, category, searchTerm } = req.query;
-  try {
-    const filters = {}
+exports.filterEquipment = async (req, res) => {
+  const { name, category, tags } = req.query; // Extract query parameters
 
-    if(name){
-      filters.name = { [Op.iLike]: `%${name}%`};
+  try {
+    // Build a dynamic filter object
+    const filter = {};
+
+    if (name) {
+      // Use case-insensitive regex for name filtering
+      filter.name = { $regex: name, $options: "i" };
     }
 
     if (category) {
-      filters.category = { [Op.eq]: category };
+      filter.category = category;
     }
 
-    if (searchTerm) {
-      filters[Op.or] = [
-        { name: { [Op.iLike]: `%${searchTerm}%` } },  
-        { category: { [Op.iLike]: `%${searchTerm}%` } }
-      ];
+    if (tags) {
+      // If tags are passed, search for any matches in the tags array
+      const tagsArray = tags.split(","); // Allow comma-separated tags
+      filter.tags = { $in: tagsArray };
     }
 
-    const equipmentList = await Equipment.findAll({
-      where: filters,
-      include: User
-    });
-    res.json(equipmentList);
+    // Query the database with the filter
+    const equipment = await Equipment.find(filter);
+
+    res.status(200).json(equipment);
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    console.error("Error in filterEquipment:", err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getPaginatedEquipment = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query; // Default values: page 1, 10 items per page
+
+  try {
+    // Convert query parameters to numbers
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(limit, 10);
+
+    // Validate the inputs
+    if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+      return res.status(400).json({ message: "Invalid pagination parameters." });
+    }
+
+    // Calculate the number of items to skip
+    const skip = (pageNumber - 1) * limitNumber;
+
+    // Get total count for pagination metadata
+    const totalCount = await Equipment.countDocuments();
+
+    // Fetch paginated data
+    const equipment = await Equipment.find()
+      .skip(skip)
+      .limit(limitNumber)
+      .sort({ createdAt: -1 }); // Sort by creation date (most recent first)
+
+    // Response with pagination metadata and data
+    res.status(200).json({
+      currentPage: pageNumber,
+      totalPages: Math.ceil(totalCount / limitNumber),
+      totalItems: totalCount,
+      data: equipment,
+    });
+  } catch (err) {
+    console.error("Error in getPaginatedEquipment:", err);
+    res.status(500).json({ error: err.message });
+  }
 };

@@ -87,6 +87,8 @@ router.post(
  */
 router.get("/", equipmentController.getAllEquipment);
 
+router.get("/", equipmentController.getPaginatedEquipment);
+
 /**
  * @swagger
  * /equipment/{id}:
@@ -276,7 +278,7 @@ router.post(
  *       '500':
  *         description: Internal server error.
  */
-router.get("/filter", equipmentController.getFilteredEquipment);
+router.get("/filter", equipmentController.filterEquipment);
 
 /**
  * @swagger
