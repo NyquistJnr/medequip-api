@@ -67,7 +67,7 @@ exports.getAllEquipment = async (req, res) => {
       filters.name = { [Op.iLike]: `%${name}%`};
     }
 
-    if (category && !searchTerm) {
+    if (category && category != 'all' && !searchTerm) {
       filters.category = { [Op.iLike]: category };
     }
 
