@@ -82,7 +82,7 @@ exports.getAllEquipment = async (req, res) => {
       ];
     }
     // let currentPage = page || 1
-    const { rows, count } = await Equipment.findAll({
+    const { rows, count } = await Equipment.findAndCountAll({
       limit: pageSize,                    
       offset: ((page || 1) - 1) * pageSize,      
       order: [['createdAt', 'DESC']], 
