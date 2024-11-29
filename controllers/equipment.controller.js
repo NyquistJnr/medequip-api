@@ -34,9 +34,28 @@ exports.createEquipment = async (req, res) => {
 
 // Get all Equipment
 exports.getAllEquipment = async (req, res) => {
+ const { name, category, searchTerm } = req.query;
   try {
+    const filters = {}
+
+    if(name){
+      filters.name = { [Op.iLike]: `%${name}%`};
+    }
+
+    if (category) {
+      filters.category = { [Op.eq]: category };
+    }
+
+    if (searchTerm) {
+      filters[Op.or] = [
+        { name: { [Op.iLike]: `%${searchTerm}%` } },  
+        { category: { [Op.iLike]: `%${searchTerm}%` } }
+      ];
+    }
+
     const equipmentList = await Equipment.findAll({
-      include: User, // Include user info if needed
+      where: filters,
+      include: User
     });
     res.json(equipmentList);
   } catch (err) {
