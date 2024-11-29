@@ -15,8 +15,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 
-app.use(bodyParser.json({limit: '40mb'}));
-app.use(bodyParser.urlencoded({ limit: '40mb', extended: true }));
+app.use(bodyParser.json({ limit: "40mb" }));
+app.use(bodyParser.urlencoded({ limit: "40mb", extended: true }));
 setupSwagger(app);
 
 app.get("/", (req, res) => {
@@ -30,7 +30,7 @@ app.use("/api/equipment", equipmentRoutes);
 // Setup Swagger
 
 sequelize
-  .sync()
+  .sync(/* { force: true } */)
   .then(() => {
     console.log("Database connected and synced successfully");
 

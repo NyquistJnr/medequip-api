@@ -9,7 +9,16 @@ const SavedEquipment = require("../models/savedequipment.model");
 
 // Signup logic
 exports.signup = async (req, res) => {
-  const { firstname, lastname, email, password, phone, dob } = req.body;
+  const {
+    firstname,
+    lastname,
+    email,
+    password,
+    phone,
+    dob,
+    occupation,
+    address,
+  } = req.body;
   try {
     // Check if user already exists
     let user = await User.findOne({ where: { email } });
@@ -28,14 +37,16 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
       phone,
       dob,
+      occupation,
+      address,
       role: "user",
     });
 
     // Generate SavedEquipment
     await SavedEquipment.create({
       userId: user.id,
-      equipmentId: []
-    })
+      equipmentId: [],
+    });
 
     // Generate a verification token
     const verificationToken = jwt.sign(
@@ -113,7 +124,9 @@ exports.login = async (req, res) => {
         email: user.email,
         role: user.role, //user.role
         phone: user.phone,
-        dob: user.dob
+        dob: user.dob,
+        occupation: user.occupation,
+        address: user.address,
       },
       accessToken,
       refreshToken,

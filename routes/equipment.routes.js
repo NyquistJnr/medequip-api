@@ -91,7 +91,7 @@ router.get("/", equipmentController.getAllEquipment);
  * @swagger
  * /equipment/pagination:
  *   get:
- *     summary: Get All and paginate all Equipment  
+ *     summary: Get All and paginate all Equipment
  *     description: Retrieve a list of all equipment and paginate them 10 to 1 page. No authentication required.
  *     tags: [Equipment]
  *     responses:
@@ -246,12 +246,7 @@ router.delete(
  *       '500':
  *         description: Internal server error.
  */
-router.get(
-  "/view/saved",
-  authenticate,
-  equipmentController.getSavedEquipment
-);
-
+router.get("/view/saved", authenticate, equipmentController.getSavedEquipment);
 
 router.post(
   "/create/savedEquipment",
@@ -325,11 +320,7 @@ router.get("/filter", equipmentController.filterEquipment);
  *       '500':
  *         description: Internal server error.
  */
-router.put(
-  "/save/:id",
-  authenticate,
-  equipmentController.saveEquipment
-);
+router.put("/save/:id", authenticate, equipmentController.saveEquipment);
 /**
  * @swagger
  * /equipment/popular:
@@ -349,9 +340,6 @@ router.put(
  *       '500':
  *         description: Internal server error.
  */
-router.get(
-  "/popular",
-  equipmentController.getPopularEquipments
-);
+router.get("/popular", equipmentController.getPopularEquipments);
 
 module.exports = router;

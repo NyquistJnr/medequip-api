@@ -34,6 +34,10 @@ const Equipment = sequelize.define("Equipment", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  popularity: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
   userId: {
     type: DataTypes.INTEGER,
     references: {

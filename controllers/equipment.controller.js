@@ -7,12 +7,12 @@ const { uploadImages } = require("../utils/firebaseService"); // Make sure to im
 
 // Create Equipment
 exports.createEquipment = async (req, res) => {
-  const { name, description, category, tags, useCases } = req.body;
+  const { name, description, category, tags, popularity, useCases } = req.body;
   const userId = req.user.id; // Extract userId from the authenticated user
 
   try {
     console.log("files received: ", req.files);
-    
+
     // Upload images to Firebase and get URLs
     const imageUrls = await uploadImages(req.files);
 
@@ -22,6 +22,7 @@ exports.createEquipment = async (req, res) => {
       category,
       images: imageUrls,
       tags,
+      popularity,
       useCases,
       userId,
     });
@@ -34,60 +35,66 @@ exports.createEquipment = async (req, res) => {
 
 // Get all Equipment
 //exports.getAllEquipment = async (req, res) => {
- // const { name, category, searchTerm } = req.query;
- //  try {
- //    const filters = {}
+// const { name, category, searchTerm } = req.query;
+//  try {
+//    const filters = {}
 
- //    if(name){
- //      filters.name = { [Op.iLike]: `%${name}%`};
- //    }
+//    if(name){
+//      filters.name = { [Op.iLike]: `%${name}%`};
+//    }
 
- //    if (category) {
- //      filters.category = { [Op.eq]: category };
- //    }
+//    if (category) {
+//      filters.category = { [Op.eq]: category };
+//    }
 
- //    if (searchTerm) {
-    //   filters[Op.or] = [
-    //     { name: { [Op.iLike]: `%${searchTerm}%` } },  
-    //     { category: { [Op.iLike]: `%${searchTerm}%` } }
-    //   ];
-    // }
+//    if (searchTerm) {
+//   filters[Op.or] = [
+//     { name: { [Op.iLike]: `%${searchTerm}%` } },
+//     { category: { [Op.iLike]: `%${searchTerm}%` } }
+//   ];
+// }
 
- //    const equipmentList = await Equipment.findAll({
- //      where: filters,
- //      include: User
-    //});
+//    const equipmentList = await Equipment.findAll({
+//      where: filters,
+//      include: User
+//});
 exports.getAllEquipment = async (req, res) => {
   const { name, category, keyword, searchTerm, page } = req.query;
-  const pageSize = 20
+  const pageSize = 20;
   try {
-    const filters = {}
+    const filters = {};
 
-    if(name){
-      filters.name = { [Op.iLike]: `%${name}%`};
+    if (name) {
+      filters.name = { [Op.iLike]: `%${name}%` };
     }
 
-    if (category && category != 'all' && !searchTerm) {
+    if (category && category != "all" && !searchTerm) {
       filters.category = { [Op.iLike]: category };
     }
 
-    if(keyword){
-      filters.keyword = { [Op.iContains]: keyword}
+    if (keyword) {
+      filters.keyword = { [Op.iContains]: keyword };
     }
     if (searchTerm) {
       filters[Op.or] = [
-        { name: { [Op.iLike]: `%${searchTerm}%` } },  
-        { category: { [Op.iLike]: `%${category && category != 'all' ? category : searchTerm}%` } }
+        { name: { [Op.iLike]: `%${searchTerm}%` } },
+        {
+          category: {
+            [Op.iLike]: `%${
+              category && category != "all" ? category : searchTerm
+            }%`,
+          },
+        },
         // { keyword: { [Op.iContains]: `%${searchTerm}%` } }
       ];
     }
     // let currentPage = page || 1
     const { rows, count } = await Equipment.findAndCountAll({
-      limit: pageSize,                    
-      offset: ((page || 1) - 1) * pageSize,      
-      order: [['createdAt', 'DESC']], 
+      limit: pageSize,
+      offset: ((page || 1) - 1) * pageSize,
+      order: [["createdAt", "DESC"]],
       where: filters,
-      include: User
+      include: User,
     });
     res.json({
       data: rows,
@@ -117,7 +124,7 @@ exports.getEquipmentById = async (req, res) => {
 // Update Equipment
 exports.updateEquipment = async (req, res) => {
   const { id } = req.params;
-  const { name, description, category, tags, useCases } = req.body;
+  const { name, description, category, popularity, tags, useCases } = req.body;
 
   try {
     const equipment = await Equipment.findByPk(id);
@@ -168,8 +175,8 @@ exports.createSavedEquipment = async (req, res) => {
   try {
     const savedequipment = await SavedEquipment.upsert({
       userId: userId,
-      equipmentIds: []
-    })
+      equipmentIds: [],
+    });
 
     res.status(201).json(savedequipment);
   } catch (err) {
@@ -180,67 +187,67 @@ exports.createSavedEquipment = async (req, res) => {
 exports.getPopularEquipments = async (req, res) => {
   try {
     const equipments = await Post.findAll({
-      order: sequelize.literal('max(popularity) DESC'),
-      limit: 10
+      order: sequelize.literal("max(popularity) DESC"),
+      limit: 10,
     });
-    res.json(equipments)
+    res.json(equipments);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};
 
 exports.getSavedEquipment = async (req, res) => {
   try {
     const savedEquipmentList = await SavedEquipment.findOne({
       where: { userId: req.user.id },
-    })
+    });
 
-    if(!savedEquipmentList){
-      return ;
+    if (!savedEquipmentList) {
+      return;
     }
-    const equipmentIds = savedEquipmentList.equipmentIds
+    const equipmentIds = savedEquipmentList.equipmentIds;
 
     const equipmentDetails = await Equipment.findAll({
       where: {
         id: {
-          [Op.in]: equipmentIds
-        }
-      }
+          [Op.in]: equipmentIds,
+        },
+      },
     });
     res.status(200).json(equipmentDetails);
-  } catch(err) {
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};
 
 exports.saveEquipment = async (req, res) => {
   try {
     const { id } = req.params;
     const savedEquipment = await SavedEquipment.findOne({
-      where: { userId: req.user.id}
-    })
-    
-    if(savedEquipment){
-      let equipmentIds = savedEquipment.equipmentIds || []
+      where: { userId: req.user.id },
+    });
+
+    if (savedEquipment) {
+      let equipmentIds = savedEquipment.equipmentIds || [];
       if (!equipmentIds.includes(id)) {
         equipmentIds.push(id);
-        
+
         // Update the record and save to the database
         savedEquipment.equipmentIds = equipmentIds;
         await savedEquipment.save();
       } else {
         console.log("Equipment ID already added.");
       }
-    }else {
-        await SavedEquipment.create({
-          userId: req.user.id,
-          equipmentIds: [id]
-        });
+    } else {
+      await SavedEquipment.create({
+        userId: req.user.id,
+        equipmentIds: [id],
+      });
     }
 
-    res.status(200).json({message: "equipment added"});
+    res.status(200).json({ message: "equipment added" });
   } catch (err) {
-    res.status(500).json({error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -272,8 +279,8 @@ exports.filterEquipment = async (req, res) => {
     res.status(200).json(equipment);
   } catch (err) {
     console.error("Error in filterEquipment:", err);
-    res.status(500).json({ error: err.message });
-  }
+    res.status(500).json({ error: err.message });
+  }
 };
 
 exports.getPaginatedEquipment = async (req, res) => {
@@ -285,8 +292,15 @@ exports.getPaginatedEquipment = async (req, res) => {
     const limitNumber = parseInt(limit, 10);
 
     // Validate the inputs
-    if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
-      return res.status(400).json({ message: "Invalid pagination parameters." });
+    if (
+      isNaN(pageNumber) ||
+      isNaN(limitNumber) ||
+      pageNumber < 1 ||
+      limitNumber < 1
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Invalid pagination parameters." });
     }
 
     // Calculate the number of items to skip
@@ -310,6 +324,6 @@ exports.getPaginatedEquipment = async (req, res) => {
     });
   } catch (err) {
     console.error("Error in getPaginatedEquipment:", err);
-    res.status(500).json({ error: err.message });
-  }
+    res.status(500).json({ error: err.message });
+  }
 };
