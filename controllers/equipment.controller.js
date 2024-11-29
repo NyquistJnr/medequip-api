@@ -58,7 +58,8 @@ exports.createEquipment = async (req, res) => {
  //      include: User
     //});
 exports.getAllEquipment = async (req, res) => {
-  const { name, category, keyword, searchTerm } = req.query;
+  const { name, category, keyword, searchTerm, page } = req.query;
+  const pageSize = 20
   try {
     const filters = {}
 
@@ -80,12 +81,20 @@ exports.getAllEquipment = async (req, res) => {
         { keyword: { [Op.iContains]: `%${searchTerm}%` } }
       ];
     }
-
-    const equipmentList = await Equipment.findAll({
+    // let currentPage = page || 1
+    const { rows, count } = await Equipment.findAll({
+      limit: pageSize,                    
+      offset: ((page || 1) - 1) * pageSize,      
+      order: [['createdAt', 'DESC']], 
       where: filters,
       include: User
     });
-    res.json(equipmentList);
+    res.json({
+      data: rows,
+      currentPage: page,
+      totalPages: Math.ceil(count / pageSize),
+      totalRecords: count,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
