@@ -58,7 +58,7 @@ exports.createEquipment = async (req, res) => {
  //      include: User
     //});
 exports.getAllEquipment = async (req, res) => {
-  const { name, category, keyword } = req.query;
+  const { name, category, keyword, searchTerm } = req.query;
   try {
     const filters = {}
 
@@ -70,6 +70,9 @@ exports.getAllEquipment = async (req, res) => {
       filters.category = { [Op.eq]: category };
     }
 
+    if(keyword){
+      filters.keyword = { [Op.in]: keyword}
+    }
     if (searchTerm) {
       filters[Op.or] = [
         { name: { [Op.iLike]: `%${name}%` } },  
