@@ -67,7 +67,7 @@ exports.getAllEquipment = async (req, res) => {
       filters.name = { [Op.iLike]: `%${name}%`};
     }
 
-    if (category) {
+    if (category && !searchTerm) {
       filters.category = { [Op.iLike]: category };
     }
 
@@ -77,7 +77,7 @@ exports.getAllEquipment = async (req, res) => {
     if (searchTerm) {
       filters[Op.or] = [
         { name: { [Op.iLike]: `%${searchTerm}%` } },  
-        { category: { [Op.iLike]: `%${searchTerm}%` } }
+        { category: { [Op.iLike]: `%${category? category : searchTerm}%` } }
         // { keyword: { [Op.iContains]: `%${searchTerm}%` } }
       ];
     }
