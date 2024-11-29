@@ -67,17 +67,17 @@ exports.getAllEquipment = async (req, res) => {
     }
 
     if (category) {
-      filters.category = { [Op.eq]: category };
+      filters.category = { [Op.iLike]: category };
     }
 
     if(keyword){
-      filters.keyword = { [Op.in]: keyword}
+      filters.keyword = { [Op.iContains]: keyword}
     }
     if (searchTerm) {
       filters[Op.or] = [
         { name: { [Op.iLike]: `%${name}%` } },  
         { category: { [Op.iLike]: `%${category}%` } },
-        { keyword: { [Op.iLike]: `%${keyword}%` } }
+        { keyword: { [Op.iContains]: `%${keyword}%` } }
       ];
     }
 
