@@ -47,11 +47,11 @@ exports.createEquipment = async (req, res) => {
  //    }
 
  //    if (searchTerm) {
- //      filters[Op.or] = [
- //        { name: { [Op.iLike]: `%${searchTerm}%` } },  
- //        { category: { [Op.iLike]: `%${searchTerm}%` } }
- //      ];
- //    }
+    //   filters[Op.or] = [
+    //     { name: { [Op.iLike]: `%${searchTerm}%` } },  
+    //     { category: { [Op.iLike]: `%${searchTerm}%` } }
+    //   ];
+    // }
 
  //    const equipmentList = await Equipment.findAll({
  //      where: filters,
@@ -63,7 +63,7 @@ exports.getAllEquipment = async (req, res) => {
     const filters = {}
 
     if(name){
-      filters.name = { [Op.iLike]: %${name}%};
+      filters.name = { [Op.iLike]: `%${name}%`};
     }
 
     if (category) {
@@ -72,9 +72,9 @@ exports.getAllEquipment = async (req, res) => {
 
     if (searchTerm) {
       filters[Op.or] = [
-        { name: { [Op.iLike]: %${name}% } },  
-        { category: { [Op.iLike]: %${category}% } },
-        { keyword: { [Op.iLike]: %${keyword}% } }
+        { name: { [Op.iLike]: `%${name}%` } },  
+        { category: { [Op.iLike]: `%${category}%` } },
+        { keyword: { [Op.iLike]: `%${keyword}%` } }
       ];
     }
 
