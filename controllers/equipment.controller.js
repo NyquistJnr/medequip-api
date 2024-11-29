@@ -33,13 +33,37 @@ exports.createEquipment = async (req, res) => {
 };
 
 // Get all Equipment
+//exports.getAllEquipment = async (req, res) => {
+ // const { name, category, searchTerm } = req.query;
+ //  try {
+ //    const filters = {}
+
+ //    if(name){
+ //      filters.name = { [Op.iLike]: `%${name}%`};
+ //    }
+
+ //    if (category) {
+ //      filters.category = { [Op.eq]: category };
+ //    }
+
+ //    if (searchTerm) {
+ //      filters[Op.or] = [
+ //        { name: { [Op.iLike]: `%${searchTerm}%` } },  
+ //        { category: { [Op.iLike]: `%${searchTerm}%` } }
+ //      ];
+ //    }
+
+ //    const equipmentList = await Equipment.findAll({
+ //      where: filters,
+ //      include: User
+    //});
 exports.getAllEquipment = async (req, res) => {
- const { name, category, searchTerm } = req.query;
+  const { name, category, keyword } = req.query;
   try {
     const filters = {}
 
     if(name){
-      filters.name = { [Op.iLike]: `%${name}%`};
+      filters.name = { [Op.iLike]: %${name}%};
     }
 
     if (category) {
@@ -48,8 +72,9 @@ exports.getAllEquipment = async (req, res) => {
 
     if (searchTerm) {
       filters[Op.or] = [
-        { name: { [Op.iLike]: `%${searchTerm}%` } },  
-        { category: { [Op.iLike]: `%${searchTerm}%` } }
+        { name: { [Op.iLike]: %${name}% } },  
+        { category: { [Op.iLike]: %${category}% } },
+        { keyword: { [Op.iLike]: %${keyword}% } }
       ];
     }
 
