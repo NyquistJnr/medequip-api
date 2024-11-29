@@ -91,7 +91,7 @@ exports.getAllEquipment = async (req, res) => {
     });
     res.json({
       data: rows,
-      currentPage: page,
+      currentPage: page || 1,
       totalPages: Math.ceil(count / pageSize),
       totalRecords: count,
     });
