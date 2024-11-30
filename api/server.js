@@ -30,7 +30,7 @@ app.use("/api/equipment", equipmentRoutes);
 // Setup Swagger
 
 sequelize
-  .sync({ force: true })
+  .sync({ alter: true })
   .then(() => {
     console.log("Database connected and synced successfully");
 
