@@ -61,7 +61,7 @@ const upload = multer({ storage: multer.memoryStorage() }); // Use memory storag
 router.post(
   "/",
   authenticate,
-  checkRole(["admin", "super", "user"]),
+  checkRole(["admin", "super"]),
   upload.array("images"),
   equipmentController.createEquipment
 );
@@ -191,7 +191,7 @@ router.get("/:id", equipmentController.getEquipmentById);
 router.put(
   "/:id",
   authenticate,
-  checkRole(["admin", "super", "user"]),
+  checkRole(["admin", "super"]),
   upload.array("images"),
   equipmentController.updateEquipment
 );
@@ -223,7 +223,7 @@ router.put(
 router.delete(
   "/:id",
   authenticate,
-  checkRole(["admin", "super", "user"]),
+  checkRole(["admin", "super"]),
   equipmentController.deleteEquipment
 );
 

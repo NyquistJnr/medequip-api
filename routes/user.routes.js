@@ -155,7 +155,7 @@ router.put("/:id", authenticate, async (req, res) => {
 router.delete(
   "/:id",
   authenticate,
-  checkRole(["admin", "super", "user"]),
+  checkRole(["admin", "super"]),
   async (req, res) => {
     try {
       const user = await User.findByPk(req.params.id);
