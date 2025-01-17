@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 
 // Send Verification Email
 exports.sendVerificationEmail = async (email, token) => {
-  const verificationLink = `https://draycore-med.vercel.app/2FA/${token}`; //verification link
+  const verificationLink = `https://draycore-med-tau.vercel.app/2FA/${token}`; //verification link
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
@@ -23,7 +23,7 @@ exports.sendVerificationEmail = async (email, token) => {
 
 // Send Password Reset Email
 exports.sendPasswordResetEmail = async (email, token) => {
-  const resetLink = `https://draycore-med.vercel.app/reset-password/${token}`;
+  const resetLink = `https://draycore-med-tau.vercel.app/reset-password/${token}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
